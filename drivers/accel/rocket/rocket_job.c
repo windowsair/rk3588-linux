@@ -529,6 +529,15 @@ static irqreturn_t rocket_job_irq_handler(int irq, void *data)
 
 int rocket_job_init(struct rocket_core *core)
 {
+	struct drm_sched_init_args sched_args = {
+		.ops = &rocket_sched_ops,
+		.num_rqs = DRM_SCHED_PRIORITY_COUNT,
+		.credit_limit = 1,
+		.hang_limit = 0,
+		.timeout = msecs_to_jiffies(JOB_TIMEOUT_MS),
+		.name = "rocket",
+		.dev = core->dev,
+	};
 	int ret;
 
 	INIT_WORK(&core->reset.work, rocket_reset_work);
@@ -552,15 +561,12 @@ int rocket_job_init(struct rocket_core *core)
 	if (!core->reset.wq)
 		return -ENOMEM;
 
+	sched_args.timeout_wq = core->reset.wq;
+
 	core->fence_context = dma_fence_context_alloc(1);
 
-	ret = drm_sched_init(&core->sched,
-				&rocket_sched_ops, NULL,
-				DRM_SCHED_PRIORITY_COUNT,
-				1, 0,
-				msecs_to_jiffies(JOB_TIMEOUT_MS),
-				core->reset.wq,
-				NULL, "rocket", core->dev);
+
+	ret = drm_sched_init(&core->sched, &sched_args);
 	if (ret) {
 		dev_err(core->dev, "Failed to create scheduler: %d.", ret);
 		goto err_sched;
