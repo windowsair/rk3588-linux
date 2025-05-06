@@ -125,19 +125,38 @@ generate tests:
     - mkdir dtbs
     - cp -r deb/usr/lib/linux-image*/* dtbs
     - sed -i s,%%KERNEL_BUILD_JOB%%,${CI_JOB_ID},g lava/rock5b-testjob.yaml
+    - sed -i s,%%KERNEL_BUILD_JOB%%,${CI_JOB_ID},g lava/sige5-testjob.yaml
   artifacts:
     paths:
       - vmlinuz*
       - modules.tar.gz
       - dtbs
       - lava/rock5b-testjob.yaml
+      - lava/sige5-testjob.yaml
 
 lava rock5b test:
   stage: lava
+  environment: rock5b
   tags:
     - lava-runner
   script:
     - submit lava/rock5b-testjob.yaml
+  needs:
+    - "generate tests"
+  artifacts:
+    when: always
+    paths:
+      - "*"
+    reports:
+      junit: "*_junit.xml"
+
+lava sige5 test:
+  stage: lava
+  environment: sige5
+  tags:
+    - lava-runner
+  script:
+    - submit lava/sige5-testjob.yaml
   needs:
     - "generate tests"
   artifacts:
