@@ -230,7 +230,7 @@ actions:
               - lava-test-shell
           run:
             steps:
-              - for dev in /dev/video* ; do echo "Device $dev" ; v4l2-ctl -d $dev -l -D ; echo "" ; done
+              - find /dev -mindepth 1 -maxdepth 1 -type c -name 'video*' -exec bash -c 'echo "Device $0" ; v4l2-ctl -d $0 -l -D ; echo ""' {} \;
         from: inline
         name: v4l2
         path: inline/v4l2.yaml
