@@ -12,6 +12,8 @@
 struct rocket_device {
 	struct drm_device ddev;
 
+	struct mutex sched_lock;
+
 	struct clk_bulk_data clks[2];
 
 	struct mutex iommu_lock;
