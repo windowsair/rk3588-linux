@@ -14,6 +14,8 @@ struct rocket_device {
 
 	struct clk_bulk_data clks[2];
 
+	struct mutex iommu_lock;
+
 	struct rocket_core *cores;
 	unsigned int num_cores;
 };
