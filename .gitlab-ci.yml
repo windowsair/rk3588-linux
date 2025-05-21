@@ -119,6 +119,11 @@ generate tests:
     - mkdir deb
     - "for x in artifacts/linux-image*.deb ; do dpkg -x ${x} deb ; done"
     - cp deb/boot/vmlinuz* vmlinuz
+    # TODO: this should be sourced from the CI initramfs instead. It is
+    # currently not part of it, since mkinitramfs only adds firmwares
+    # referenced by modules contained in the initramfs and the initramfs
+    # generated for CI purposes does not contain any kernel. Once this
+    # has been fixed, the following two lines should be removed.
     - mkdir -p deb/lib/firmware/arm/mali/arch10.8
     - wget -O deb/lib/firmware/arm/mali/arch10.8/mali_csffw.bin "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/plain/arm/mali/arch10.8/mali_csffw.bin"
     - tar -f modules.tar.gz  -C deb  -c -z -v lib/modules lib/firmware
