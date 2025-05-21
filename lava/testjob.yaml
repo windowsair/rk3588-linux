@@ -1,6 +1,6 @@
-device_type: %%DEVTYPE%%
+device_type: {{job.DEVTYPE}}
 
-job_name: Hardware enablement tests on %%DEVTYPE%% {{job.CI_JOB_ID}}
+job_name: Hardware enablement tests on {{job.DEVTYPE}} {{job.CI_JOB_ID}}
 timeouts:
   job:
     minutes: 15
@@ -24,7 +24,7 @@ actions:
         url: "{{job.CI_PROJECT_URL}}/-/jobs/%%KERNEL_BUILD_JOB%%/artifacts/raw/modules.tar.gz"
         compression: gz
       dtb:
-        url: "{{job.CI_PROJECT_URL}}/-/jobs/%%KERNEL_BUILD_JOB%%/artifacts/raw/dtbs/rockchip/%%DEVTYPE%%.dtb"
+        url: "{{job.CI_PROJECT_URL}}/-/jobs/%%KERNEL_BUILD_JOB%%/artifacts/raw/dtbs/rockchip/{{job.DEVTYPE}}.dtb"
       ramdisk:
         url: https://gitlab.collabora.com/hardware-enablement/rockchip-3588/debian-image-recipes/-/jobs/artifacts/main/raw/out/trixie-rootfs-arm64-initramfs.gz?job=ci+image
         compression: gz

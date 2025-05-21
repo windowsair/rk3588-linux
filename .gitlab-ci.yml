@@ -110,7 +110,6 @@ generate tests:
   variables:
     GIT_STRATEGY: fetch
     GIT_DEPTH: "1"
-    DUT: rk3588-rock-5b rk3576-armsom-sige5 rk3576-rock-4d
   needs:
     - "build arm64 debian package"
   before_script:
@@ -126,48 +125,31 @@ generate tests:
     - mkdir dtbs
     - cp -r deb/usr/lib/linux-image*/* dtbs
     - sed -i s,%%KERNEL_BUILD_JOB%%,${CI_JOB_ID},g lava/testjob.yaml
-    - for device in ${DUT} ; do cat lava/testjob.yaml | sed s,%%DEVTYPE%%,${device},g > lava/testjob-${device}.yaml ; done
   artifacts:
     paths:
       - vmlinuz*
       - modules.tar.gz
       - dtbs
-      - lava/testjob-*.yaml
+      - lava/testjob.yaml
 
-.lava test:
+lava test:
   stage: lava
-  environment: $DUT
+  environment: $DEVTYPE
   tags:
     - lava-runner
   needs:
     - "generate tests"
+  script:
+    - submit lava/testjob.yaml
   artifacts:
     when: always
     paths:
       - "*"
     reports:
       junit: "*_junit.xml"
-
-# Unfortunately lava-gitlab-runner does not support variable expansion, so
-# this cannot be done with a matrix, see also
-# https://github.com/collabora/lava-gitlab-runner/issues/20
-lava test rk3588-rock-5b:
-  extends: .lava test
-  variables:
-    DUT: rk3588-rock-5b
-  script:
-    - submit lava/testjob-rk3588-rock-5b.yaml
-
-lava test rk3576-armsom-sige5:
-  extends: .lava test
-  variables:
-    DUT: rk3576-armsom-sige5
-  script:
-    - submit lava/testjob-rk3576-armsom-sige5.yaml
-
-lava test rk3576-rock-4d:
-  extends: .lava test
-  variables:
-    DUT: rk3576-rock-4d
-  script:
-    - submit lava/testjob-rk3576-rock-4d.yaml
+  parallel:
+    matrix:
+      - DEVTYPE:
+        - rk3588-rock-5b
+        - rk3576-rock-4d
+        - rk3576-armsom-sige5
