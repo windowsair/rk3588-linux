@@ -13,6 +13,8 @@
 struct rocket_device {
 	struct drm_device ddev;
 
+	struct mutex sched_lock;
+
 	struct mutex iommu_lock;
 
 	struct rocket_core *cores;
