@@ -37,6 +37,20 @@ struct rocket_core {
 	void __iomem *cna_iomem;
 	void __iomem *core_iomem;
 	struct clk_bulk_data clks[4];
+
+	struct rocket_job *in_flight_job;
+
+	spinlock_t job_lock;
+
+	struct {
+		struct workqueue_struct *wq;
+		struct work_struct work;
+		atomic_t pending;
+	} reset;
+
+	struct drm_gpu_scheduler sched;
+	u64 fence_context;
+	u64 emit_seqno;
 };
 
 int rocket_core_init(struct rocket_core *core);
