@@ -8,6 +8,7 @@
 #include <linux/pm_runtime.h>
 
 #include "rocket_core.h"
+#include "rocket_job.h"
 
 int rocket_core_init(struct rocket_core *core)
 {
@@ -38,6 +39,10 @@ int rocket_core_init(struct rocket_core *core)
 		return PTR_ERR(core->core_iomem);
 	}
 
+	err = rocket_job_init(core);
+	if (err)
+		return err;
+
 	pm_runtime_use_autosuspend(dev);
 
 	/*
@@ -51,6 +56,10 @@ int rocket_core_init(struct rocket_core *core)
 	pm_runtime_enable(dev);
 
 	err = pm_runtime_get_sync(dev);
+	if (err) {
+		rocket_job_fini(core);
+		return err;
+	}
 
 	version = rocket_pc_readl(core, VERSION);
 	version += rocket_pc_readl(core, VERSION_NUM) & 0xffff;
@@ -67,4 +76,5 @@ void rocket_core_fini(struct rocket_core *core)
 {
 	pm_runtime_dont_use_autosuspend(core->dev);
 	pm_runtime_disable(core->dev);
+	rocket_job_fini(core);
 }
