@@ -156,7 +156,9 @@ lava test:
       junit: "*_junit.xml"
   parallel:
     matrix:
-      - DEVTYPE:
+      - LAVA_TEST_BASELINE: 1
+        LAVA_TEST: baseline
+        DEVTYPE:
         - rk3588-rock-5b
         - rk3576-rock-4d
         - rk3576-armsom-sige5
