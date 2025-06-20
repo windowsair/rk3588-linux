@@ -236,3 +236,23 @@ actions:
         name: v4l2
         path: inline/v4l2.yaml
 {{ /if }}
+{{ #if job.LAVA_TEST_WATCHDOG }}
+  - test:
+      timeout:
+        minutes: 5
+      interactive:
+      - name: wdt-reset
+        prompts: ['root@rk3588-ci(.*)#']
+        script:
+        - name: wdt-get-timeout
+          command: "wdt_timeout=$(cat /sys/class/watchdog/watchdog0/timeout)"
+          wait_for_prompt: true
+          failures:
+          - message: "cat: /sys/class/watchdog/watchdog\\d+/timeout: No such file or directory"
+            exception: JobError
+        - name: wdt-trigger-reset
+          command: "sleep $((wdt_timeout + 5)) > /dev/watchdog0"
+          wait_for_prompt: false
+          successes:
+          - message: U-Boot
+{{ /if }}
