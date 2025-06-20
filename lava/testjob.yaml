@@ -1,6 +1,6 @@
 device_type: {{job.DEVTYPE}}
 
-job_name: Hardware enablement tests on {{job.DEVTYPE}} {{job.CI_JOB_ID}}
+job_name: Hardware enablement {{ job.LAVA_TEST }} test on {{job.DEVTYPE}} {{job.CI_JOB_ID}}
 timeouts:
   job:
     minutes: 15
@@ -55,6 +55,7 @@ actions:
         - 'user@rk3588-ci(.*)$'
         - 'root@rk3588-ci(.*)#'
 
+{{ #if job.LAVA_TEST_BASELINE }}
   - test:
       timeout:
         minutes: 5
@@ -234,3 +235,4 @@ actions:
         from: inline
         name: v4l2
         path: inline/v4l2.yaml
+{{ /if }}
