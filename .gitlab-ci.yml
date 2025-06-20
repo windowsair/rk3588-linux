@@ -162,3 +162,9 @@ lava test:
         - rk3588-rock-5b
         - rk3576-rock-4d
         - rk3576-armsom-sige5
+      - LAVA_TEST_WATCHDOG: 1
+        LAVA_TEST: watchdog
+        DEVTYPE:
+        - rk3588-rock-5b
+        - rk3576-rock-4d
+        - rk3576-armsom-sige5
