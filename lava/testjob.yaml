@@ -312,6 +312,24 @@ actions:
       timeout:
         minutes: 10
 {{ /if }}
+{{ #if job.LAVA_TEST_KSELFTEST_DT }}
+  - test:
+      definitions:
+      - from: git
+        name: kselftest-dt
+        parameters:
+          ENV: ''
+          SKIPFILE: /dev/null
+          SKIP_INSTALL: true
+          TESTPROG_URL: "{{job.CI_PROJECT_URL}}/-/jobs/%%KSELFTEST_BUILD_JOB%%/artifacts/raw/artifacts/kselftest.tar.gz"
+          TST_CASENAME: ''
+          TST_CMDFILES: dt
+        path: automated/linux/kselftest/kselftest.yaml
+        repository: https://github.com/kernelci/test-definitions.git
+        revision: kernelci.org
+      timeout:
+        minutes: 10
+{{ /if }}
 {{ #if job.LAVA_TEST_WATCHDOG }}
   - test:
       timeout:
