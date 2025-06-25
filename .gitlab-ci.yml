@@ -156,6 +156,14 @@ lava test:
       junit: "*_junit.xml"
   parallel:
     matrix:
+      - LAVA_TEST_AVVIDEOCOMPARE: 1
+        LAVA_TEST: avvideocompare jpeg enc
+        AVVIDEOCOMPARE_GST_PIPELINE1: "v4l2jpegenc ! jpegdec"
+        AVVIDEOCOMPARE_GST_PIPELINE2: "jpegenc ! jpegdec"
+        AVVIDEOCOMPARE_GST_VID_SRC_MEDIA_TYPE: "video/x-raw,framerate=30/1,width=1920,height=1080,format=UYVY"
+        AVVIDEOCOMPARE_MIN_SCORE: "0.99"
+        DEVTYPE:
+        - rk3588-rock-5b
       - LAVA_TEST_BASELINE: 1
         LAVA_TEST: baseline
         DEVTYPE:

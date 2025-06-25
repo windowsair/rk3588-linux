@@ -58,6 +58,22 @@ actions:
         - 'user@rk3588-ci(.*)$'
         - 'root@rk3588-ci(.*)#'
 
+{{ #if job.LAVA_TEST_AVVIDEOCOMPARE }}
+  - test:
+      definitions:
+        - from: git
+          name: avvideocompare
+          path: avvideocompare/avvideocompare.yaml
+          repository: https://gitlab.collabora.com/hardware-enablement/common/lava-test-definitions.git
+          revision: main
+          parameters:
+            PIPELINE1: "{{{ job.AVVIDEOCOMPARE_GST_PIPELINE1 }}}"
+            PIPELINE2: "{{{ job.AVVIDEOCOMPARE_GST_PIPELINE2 }}}"
+            VID_SRC_MEDIA_TYPE: "{{{ job.AVVIDEOCOMPARE_GST_VID_SRC_MEDIA_TYPE }}}"
+            MIN_SCORE: "{{{ job.AVVIDEOCOMPARE_MIN_SCORE }}}"
+      timeout:
+        minutes: 10
+{{ /if }}
 {{ #if job.LAVA_TEST_BASELINE }}
   - test:
       timeout:
