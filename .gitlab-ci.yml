@@ -1,7 +1,5 @@
 default:
   image: debian:testing
-  tags:
-    - trixie
 
 stages:
   - build
