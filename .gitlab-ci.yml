@@ -162,6 +162,18 @@ lava test:
         - rk3588-rock-5b
         - rk3576-rock-4d
         - rk3576-armsom-sige5
+      - LAVA_TEST_FLUSTER: 1
+        LAVA_TEST: fluster vp8
+        TESTSUITE: 'VP8-TEST-VECTORS'
+        DECODERS: 'GStreamer-VP8-V4L2SL-Gst1.0'
+        DEVTYPE:
+        - rk3588-rock-5b
+      - LAVA_TEST_FLUSTER: 1
+        LAVA_TEST: fluster av1
+        TESTSUITE: 'AV1-TEST-VECTORS'
+        DECODERS: 'GStreamer-AV1-V4L2SL-Gst1.0'
+        DEVTYPE:
+        - rk3588-rock-5b
       - LAVA_TEST_WATCHDOG: 1
         LAVA_TEST: watchdog
         DEVTYPE:
