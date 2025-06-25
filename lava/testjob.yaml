@@ -239,6 +239,55 @@ actions:
         name: v4l2
         path: inline/v4l2.yaml
 {{ /if }}
+{{ #if job.LAVA_TEST_FLUSTER }}
+  - test:
+      definitions:
+      - from: git
+        name: fluster
+        path: fluster/fluster.yaml
+        repository: https://gitlab.collabora.com/hardware-enablement/common/lava-test-definitions.git
+        revision: main
+        parameters:
+          TESTSUITE: {{ job.TESTSUITE }}
+          DECODERS: {{ job.DECODERS }}
+          SKIP_VECTORS: >
+            av1-1-b10-23-film_grain-50
+            av1-1-b8-01-size-16x16
+            av1-1-b8-01-size-16x18
+            av1-1-b8-01-size-16x32
+            av1-1-b8-01-size-16x34
+            av1-1-b8-01-size-16x64
+            av1-1-b8-01-size-16x66
+            av1-1-b8-01-size-18x16
+            av1-1-b8-01-size-18x18
+            av1-1-b8-01-size-18x32
+            av1-1-b8-01-size-18x34
+            av1-1-b8-01-size-18x64
+            av1-1-b8-01-size-18x66
+            av1-1-b8-01-size-32x16
+            av1-1-b8-01-size-32x18
+            av1-1-b8-01-size-32x32
+            av1-1-b8-01-size-32x34
+            av1-1-b8-01-size-32x64
+            av1-1-b8-01-size-32x66
+            av1-1-b8-01-size-34x16
+            av1-1-b8-01-size-34x18
+            av1-1-b8-01-size-34x32
+            av1-1-b8-01-size-34x34
+            av1-1-b8-01-size-34x64
+            av1-1-b8-01-size-34x66
+            av1-1-b8-01-size-64x16
+            av1-1-b8-01-size-64x32
+            av1-1-b8-01-size-64x64
+            av1-1-b8-01-size-64x66
+            av1-1-b8-01-size-66x16
+            av1-1-b8-01-size-66x18
+            av1-1-b8-01-size-66x32
+            av1-1-b8-01-size-66x64
+            av1-1-b8-23-film_grain-50
+      timeout:
+        minutes: 10
+{{ /if }}
 {{ #if job.LAVA_TEST_WATCHDOG }}
   - test:
       timeout:
