@@ -15,7 +15,10 @@ context:
 actions:
   - deploy:
       timeout:
-        minutes: 2
+        minutes: 5
+      timeouts:
+        http-download:
+          minutes: 5 {{! Workaround for http-download timeout divided by number of retries}}
       to: tftp
       kernel:
         url: "{{job.CI_PROJECT_URL}}/-/jobs/%%KERNEL_BUILD_JOB%%/artifacts/raw/vmlinuz"
