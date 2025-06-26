@@ -255,6 +255,47 @@ actions:
         name: v4l2
         path: inline/v4l2.yaml
 {{ /if }}
+{{ #if job.LAVA_TEST_DMESG }}
+  - test:
+      definitions:
+        - from: git
+          name: dmesg
+          path: dmesg/dmesg.yaml
+          repository: https://gitlab.collabora.com/hardware-enablement/common/lava-test-definitions.git
+          revision: main
+          parameters:
+            LEVELS: crit,alert,emerg,err,warn
+            IGNORE_REGEX: >-
+              dw-apb-uart .* forbid DMA for kernel console|
+              gpio gpiochip.*: Static allocation of GPIO base is deprecated, use dynamic allocation|
+              panthor fb000000.gpu: \[drm\] Firmware protected mode entry not be supported, ignoring|
+              pci .*: Primary bus is hard wired to 0|
+              platform .*pcie: deferred probe pending: rockchip-dw-pcie: missing PHY|
+              platform .*usb: deferred probe pending: dwc3: failed to initialize core|
+              platform sdio-pwrseq: deferred probe pending: pwrseq_simple: external clock not ready|
+              platform regulatory.0: Direct firmware load for regulatory.db failed with error -2|
+              r8169 0004:41:00.0: Unable to load firmware rtl_nic/rtl8125b-2.fw \(-2\)|
+              Failed to create device link \(0x180\) with supplier|
+              rockchip-pm-domain fd8d8000.power-management:power-controller: Failed to enable supply: -517|
+              rockchip-thermal .* Missing rockchip,grf property|
+              rtc-hym8563 .* hctosys: unable to read the hardware clock|
+              rtc-hym8563 .* no valid clock/calendar values available|
+              rtc-hym8563 2-0051: could not init device, -6|
+              dwmmc_rockchip fe2d0000.mmc: Busy; trying anyway|
+              dwmmc_rockchip 2a320000.mmc: card claims to support voltages below defined range|
+              mmc_host mmc2: Timeout sending command \(cmd 0x202000 arg 0x0 status 0x80202000\)|
+              dwhdmiqp-rockchip fde80000.hdmi: i2c read error|
+              fdee0000.hdmi_receiver: hdmirx_wait_signal_lock wait avi_pkt_rcv failed|
+              fdee0000.hdmi_receiver: failed to unpack AVI infoframe|
+              rockchip-drm display-subsystem: .* HDMI Sink doesn.* support RGB, something.* wrong|
+              rk_gmac-dwmac .* Can not read property: [rt]x_delay|
+              rk_gmac-dwmac .* set [rt]x_delay to|
+              rk_gmac-dwmac .* supply phy not found, using dummy regulator|
+              rockchip-usb2phy .* Requested PHY is disabled|
+              cacheinfo: Unable to detect cache hierarchy for CPU 0
+      timeout:
+        minutes: 10
+{{ /if }}
 {{ #if job.LAVA_TEST_FLUSTER }}
   - test:
       definitions:

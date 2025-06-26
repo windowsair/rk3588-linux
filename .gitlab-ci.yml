@@ -189,7 +189,7 @@ generate tests:
       - dtbs
       - lava/testjob.yaml
 
-lava test:
+.lava test:
   stage: lava
   environment: $DEVTYPE
   tags:
@@ -204,6 +204,9 @@ lava test:
       - "*"
     reports:
       junit: "*_junit.xml"
+
+lava test:
+  extends: ".lava test"
   parallel:
     matrix:
       - LAVA_TEST_AVVIDEOCOMPARE: 1
@@ -246,6 +249,18 @@ lava test:
         - rk3576-armsom-sige5
       - LAVA_TEST_WATCHDOG: 1
         LAVA_TEST: watchdog
+        DEVTYPE:
+        - rk3588-rock-5b
+        - rk3576-rock-4d
+        - rk3576-armsom-sige5
+
+lava test warnings:
+  extends: ".lava test"
+  allow_failure: true
+  parallel:
+    matrix:
+      - LAVA_TEST_DMESG: 1
+        LAVA_TEST: dmesg
         DEVTYPE:
         - rk3588-rock-5b
         - rk3576-rock-4d
