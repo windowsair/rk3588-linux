@@ -177,6 +177,12 @@ lava test:
         DEVTYPE:
         - rk3588-rock-5b
       - LAVA_TEST_FLUSTER: 1
+        LAVA_TEST: fluster h264
+        TESTSUITE: 'JVT-AVC_V1'
+        DECODERS: 'GStreamer-H.264-V4L2SL-Gst1.0'
+        DEVTYPE:
+        - rk3588-rock-5b
+      - LAVA_TEST_FLUSTER: 1
         LAVA_TEST: fluster av1
         TESTSUITE: 'AV1-TEST-VECTORS'
         DECODERS: 'GStreamer-AV1-V4L2SL-Gst1.0'

@@ -301,6 +301,14 @@ actions:
             av1-1-b8-01-size-66x32
             av1-1-b8-01-size-66x64
             av1-1-b8-23-film_grain-50
+
+            CVFC1_Sony_C
+            FM1_BT_B
+            FM1_FT_E
+            FM2_SVA_C
+            MR8_BT_B
+            SP1_BT_A
+            sp2_bt_b
       timeout:
         minutes: 10
 {{ /if }}
