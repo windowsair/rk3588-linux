@@ -10,7 +10,7 @@ priority: high
 visibility: public
 
 context:
-  extra_kernel_args: rootwait systemd.tty.term.console=dumb
+  extra_kernel_args: rootwait systemd.tty.term.console=dumb loglevel=8 dynamic_debug.verbose=1 tcpm.dyndbg="+p" fusb302.dyndbg="+p"
 
 actions:
   - deploy:
