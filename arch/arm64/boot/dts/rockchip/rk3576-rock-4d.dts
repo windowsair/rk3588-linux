@@ -302,6 +302,8 @@
 		     &eth0m0_rgmii_clk
 		     &eth0m0_rgmii_bus
 		     &ethm0_clk0_25m_out>;
+	tx_delay = <0x20>;
+	rx_delay = <0x00>;
 	status = "okay";
 };
 
