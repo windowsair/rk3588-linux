@@ -292,7 +292,7 @@
 };
 
 &gmac0 {
-	clock_in_out = "output";
+	clock_in_out = "input";
 	phy-handle = <&rgmii_phy0>;
 	phy-mode = "rgmii-id";
 	pinctrl-names = "default";
