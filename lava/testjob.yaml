@@ -55,8 +55,8 @@ actions:
           - env
           - systemctl --failed
       prompts:
-        - 'user@rk3588-ci(.*)$'
-        - 'root@rk3588-ci(.*)#'
+        - 'user@rk3588-ci:(.*)$'
+        - 'root@rk3588-ci:(.*)#'
 
 {{ #if job.LAVA_TEST_AVVIDEOCOMPARE }}
   - test:
@@ -377,7 +377,7 @@ actions:
         minutes: 5
       interactive:
       - name: wdt-reset
-        prompts: ['root@rk3588-ci(.*)#']
+        prompts: ['root@rk3588-ci:(.*)#']
         script:
         - name: wdt-get-timeout
           command: "wdt_timeout=$(cat /sys/class/watchdog/watchdog0/timeout)"
