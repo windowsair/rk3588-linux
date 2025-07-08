@@ -230,7 +230,9 @@ static int rtl821x_probe(struct phy_device *phydev)
 	if (IS_ERR(priv->clk))
 		return dev_err_probe(dev, PTR_ERR(priv->clk),
 				     "failed to get phy clock\n");
-	phy_reset_after_clk_enable(phydev);
+
+	phy_device_reset(phydev, 1);
+	phy_device_reset(phydev, 0);
 
 	ret = phy_read_paged(phydev, RTL8211F_PHYCR_PAGE, RTL8211F_PHYCR1);
 	if (ret < 0)
