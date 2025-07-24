@@ -54,6 +54,8 @@ actions:
           - export SYSTEMD_COLORS=no
           - env
           - systemctl --failed
+          - timedatectl set-ntp true
+          - systemctl restart systemd-timesyncd
       prompts:
         - 'user@rk3588-ci:(.*)$'
         - 'root@rk3588-ci:(.*)#'
