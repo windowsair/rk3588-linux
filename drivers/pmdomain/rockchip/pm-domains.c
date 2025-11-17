@@ -439,6 +439,88 @@ static int rockchip_pmu_set_idle_request(struct rockchip_pm_domain *pd,
 	return 0;
 }
 
+static bool rockchip_pmu_domain_is_on(struct rockchip_pm_domain *pd);
+static int rockchip_pd_power_on(struct generic_pm_domain *domain);
+static int rockchip_pd_power_off(struct generic_pm_domain *domain);
+
+int rockchip_pmu_pd_on(struct device *dev)
+{
+	struct generic_pm_domain *genpd;
+
+	if (IS_ERR_OR_NULL(dev))
+		return -EINVAL;
+
+	if (IS_ERR_OR_NULL(dev->pm_domain))
+		return -EINVAL;
+
+	genpd = pd_to_genpd(dev->pm_domain);
+
+	return rockchip_pd_power_on(genpd);
+}
+EXPORT_SYMBOL(rockchip_pmu_pd_on);
+
+int rockchip_pmu_pd_off(struct device *dev)
+{
+	struct generic_pm_domain *genpd;
+
+	if (IS_ERR_OR_NULL(dev))
+		return -EINVAL;
+
+	if (IS_ERR_OR_NULL(dev->pm_domain))
+		return -EINVAL;
+
+	genpd = pd_to_genpd(dev->pm_domain);
+
+	return rockchip_pd_power_off(genpd);
+}
+EXPORT_SYMBOL(rockchip_pmu_pd_off);
+
+bool rockchip_pmu_pd_is_on(struct device *dev)
+{
+	struct generic_pm_domain *genpd;
+	struct rockchip_pm_domain *pd;
+	bool is_on;
+
+	if (IS_ERR_OR_NULL(dev))
+		return false;
+
+	if (IS_ERR_OR_NULL(dev->pm_domain))
+		return false;
+
+	genpd = pd_to_genpd(dev->pm_domain);
+	pd = to_rockchip_pd(genpd);
+
+	mutex_lock(&pd->pmu->mutex);
+	is_on = rockchip_pmu_domain_is_on(pd);
+	mutex_unlock(&pd->pmu->mutex);
+
+	return is_on;
+}
+EXPORT_SYMBOL(rockchip_pmu_pd_is_on);
+
+int rockchip_pmu_idle_request(struct device *dev, bool idle)
+{
+	struct generic_pm_domain *genpd;
+	struct rockchip_pm_domain *pd;
+	int ret;
+
+	if (IS_ERR_OR_NULL(dev))
+		return -EINVAL;
+
+	if (IS_ERR_OR_NULL(dev->pm_domain))
+		return -EINVAL;
+
+	genpd = pd_to_genpd(dev->pm_domain);
+	pd = to_rockchip_pd(genpd);
+
+	mutex_lock(&pd->pmu->mutex);
+	ret = rockchip_pmu_set_idle_request(pd, idle);
+	mutex_unlock(&pd->pmu->mutex);
+
+	return ret;
+}
+EXPORT_SYMBOL(rockchip_pmu_idle_request);
+
 static int rockchip_pmu_save_qos(struct rockchip_pm_domain *pd)
 {
 	int i;
