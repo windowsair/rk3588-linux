@@ -26,6 +26,7 @@
 #include <linux/slab.h>
 #include <linux/spinlock.h>
 #include <linux/string_choices.h>
+#include <soc/rockchip/rockchip_iommu.h>
 
 #include "iommu-pages.h"
 
@@ -958,6 +959,32 @@ out_disable_clocks:
 	return ret;
 }
 
+int rockchip_iommu_enable(struct device *dev)
+{
+	struct rk_iommu *iommu;
+
+	iommu = rk_iommu_from_dev(dev);
+	if (!iommu)
+		return -ENODEV;
+
+	return rk_iommu_enable(iommu);
+}
+EXPORT_SYMBOL(rockchip_iommu_enable);
+
+int rockchip_iommu_disable(struct device *dev)
+{
+	struct rk_iommu *iommu;
+
+	iommu = rk_iommu_from_dev(dev);
+	if (!iommu)
+		return -ENODEV;
+
+	rk_iommu_disable(iommu);
+
+	return 0;
+}
+EXPORT_SYMBOL(rockchip_iommu_disable);
+
 static int rk_iommu_identity_attach(struct iommu_domain *identity_domain,
 				    struct device *dev)
 {
@@ -1162,6 +1189,37 @@ static int rk_iommu_of_xlate(struct device *dev,
 
 	return 0;
 }
+
+void rockchip_iommu_mask_irq(struct device *dev)
+{
+        struct rk_iommu *iommu = rk_iommu_from_dev(dev);
+        int i;
+
+        if (!iommu)
+                return;
+
+        for (i = 0; i < iommu->num_mmu; i++)
+                rk_iommu_write(iommu->bases[i], RK_MMU_INT_MASK, 0);
+}
+EXPORT_SYMBOL(rockchip_iommu_mask_irq);
+
+void rockchip_iommu_unmask_irq(struct device *dev)
+{
+        struct rk_iommu *iommu = rk_iommu_from_dev(dev);
+        int i;
+
+        if (!iommu)
+                return;
+
+        for (i = 0; i < iommu->num_mmu; i++) {
+                /* Need to zap tlb in case of mapping during pagefault */
+                rk_iommu_base_command(iommu->bases[i], RK_MMU_CMD_ZAP_CACHE);
+                rk_iommu_write(iommu->bases[i], RK_MMU_INT_MASK, RK_MMU_IRQ_MASK);
+                /* Leave iommu in pagefault state until mapping finished */
+                rk_iommu_base_command(iommu->bases[i], RK_MMU_CMD_PAGE_FAULT_DONE);
+        }
+}
+EXPORT_SYMBOL(rockchip_iommu_unmask_irq);
 
 static const struct iommu_ops rk_iommu_ops = {
 	.identity_domain = &rk_identity_domain,
