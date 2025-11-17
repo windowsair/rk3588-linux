@@ -16,6 +16,7 @@ obj-$(CONFIG_LOGO)		  += logo/
 obj-y				  += backlight/
 
 obj-y				  += fbdev/
+obj-y				  += rockchip/
 
 obj-$(CONFIG_VIDEOMODE_HELPERS) += display_timing.o videomode.o
 ifeq ($(CONFIG_OF),y)
