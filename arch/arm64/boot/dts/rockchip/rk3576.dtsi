@@ -1009,6 +1009,48 @@
 			power-domains = <&power RK3576_PD_VPU>;
 		};
 
+		rga2_core0: rga@27920000 {
+			compatible = "rockchip,rga2";
+			reg = <0x0 0x27920000 0x0 0x1000>;
+			interrupts = <GIC_SPI 328 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "rga2_core0_irq";
+			clocks = <&cru ACLK_RGA2E_0>, <&cru HCLK_RGA2E_0>, <&cru CLK_CORE_RGA2E_0>;
+			clock-names = "aclk_rga", "hclk_rga", "clk_rga";
+			power-domains = <&power RK3576_PD_VPU>;
+			iommus = <&rga2_core0_mmu>;
+		};
+
+		rga2_core0_mmu: iommu@27920f00 {
+			compatible = "rockchip,rk3568-iommu";
+			reg = <0x0 0x27920f00 0x0 0x100>;
+			interrupts = <GIC_SPI 328 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&cru ACLK_RGA2E_0>, <&cru HCLK_RGA2E_0>;
+			clock-names = "aclk", "iface";
+			power-domains = <&power RK3576_PD_VPU>;
+			#iommu-cells = <0>;
+		};
+
+		rga2_core1: rga@27930000 {
+			compatible = "rockchip,rga2";
+			reg = <0x0 0x27930000 0x0 0x1000>;
+			interrupts = <GIC_SPI 329 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "rga2_core1_irq";
+			clocks = <&cru ACLK_RGA2E_1>, <&cru HCLK_RGA2E_1>, <&cru CLK_CORE_RGA2E_1>;
+			clock-names = "aclk_rga", "hclk_rga", "clk_rga";
+			power-domains = <&power RK3576_PD_VPU>;
+			iommus = <&rga2_core1_mmu>;
+		};
+
+		rga2_core1_mmu: iommu@27930f00 {
+			compatible = "rockchip,rk3568-iommu";
+			reg = <0x0 0x27930f00 0x0 0x100>;
+			interrupts = <GIC_SPI 329 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&cru ACLK_RGA2E_1>, <&cru HCLK_RGA2E_1>;
+			clock-names = "aclk", "iface";
+			power-domains = <&power RK3576_PD_VPU>;
+			#iommu-cells = <0>;
+		};
+
 		rkvenc0: rkvenc-core@27a00000 {
 			compatible = "rockchip,rkv-encoder-rk3576-core";
 			reg = <0x0 0x27a00000 0x0 0x6000>;
