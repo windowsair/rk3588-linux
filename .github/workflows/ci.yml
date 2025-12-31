@@ -84,6 +84,9 @@ jobs:
           -e ROCKCHIP_MULTI_RGA -e ROCKCHIP_RGA_ASYNC -e ROCKCHIP_RGA_DEBUG_FS \
           -m ROCKCHIP_MPP_SERVICE -e ROCKCHIP_MPP_PROC_FS -e ROCKCHIP_MPP_RKVDEC2 \
           -e ROCKCHIP_MPP_RKVENC2 -e ROCKCHIP_MPP_JPGDEC -e ROCKCHIP_MPP_JPGENC
+    - name: Get image_name
+      run: |
+        make image_name
     - name: Build
       run: |
         export PATH="/usr/lib/ccache:$PATH"
