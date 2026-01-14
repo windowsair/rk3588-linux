@@ -50,7 +50,7 @@ jobs:
       run: |
         dpkg --add-architecture arm64
         apt update
-        apt install -y git devscripts build-essential crossbuild-essential-arm64 bc bison ccache flex rsync kmod cpio libdw-dev libelf-dev libssl-dev libssl-dev:arm64
+        apt install -y git devscripts build-essential crossbuild-essential-arm64 bc bison ccache flex rsync kmod cpio libdw-dev libelf-dev libssl-dev libssl-dev:arm64 debhelper-compat
     - uses: actions/checkout@v6
       with:
         fetch-depth: 0
